@@ -7,15 +7,54 @@
 <html>
 
 <head>
-	<title>Steve Li</title>
-	<meta charset="utf-8" />
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js"></script> -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="/assets/css/main.css" onload="this.media='all'"/>
-	<noscript>
-		<link rel="stylesheet" href="/assets/css/noscript.css" />
-	</noscript>
-	<style>
+    <script>
+        if (!!navigator.serviceWorker) {
+            navigator.serviceWorker.register('/cw.js?t=' + new Date().getTime()).then(async (registration) => {
+                if (localStorage.getItem('cw_installed') !== 'true') {
+                    const conf = () => {
+                        console.log('[CW] Installing Success,Configuring...');
+                        fetch('/cw-cgi/api?type=config')
+                            .then(res => res.text())
+                            .then(text => {
+                                if (text === 'ok') {
+                                    console.log('[CW] Installing Success,Configuring Success,Starting...');
+                                    localStorage.setItem('cw_installed', 'true');
+                                    //如果你不希望重载页面，请移除下面七行
+                                    //重载标识 - 开始
+                                    fetch(window.location.href).then(res => res.text()).then(text => {
+                                        document.open()
+                                        document.write(text);
+                                        document.close();
+                                    });
+                                    //重载标识 - 结束
+                                } else {
+                                    console.warn('[CW] Installing Success,Configuring Failed,Sleeping 200ms...');
+                                    setTimeout(() => {
+                                        conf()
+                                    }, 200);
+                                }
+                            }).catch(err => {
+                                console.log('[CW] Installing Success,Configuring Error,Exiting...');
+                            });
+                    }
+                    setTimeout(() => {
+                        conf()
+                    }, 50);
+                }
+            }).catch(err => {
+                console.error('[CW] Installing Failed,Error: ' + err.message);
+            });
+        } else { console.error('[CW] Installing Failed,Error: Browser not support service worker'); }
+    </script>
+    <title>Steve Li</title>
+    <meta charset="utf-8" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/assets/css/main.css" onload="this.media='all'" />
+    <noscript>
+        <link rel="stylesheet" href="/assets/css/noscript.css" />
+    </noscript>
+    <style>
         #cursor {
             position: fixed;
             width: 16px;
@@ -47,61 +86,63 @@
 
 <body class="is-preload">
 
-	<!-- Wrapper -->
-	<div id="wrapper">
+    <!-- Wrapper -->
+    <div id="wrapper">
 
-		<!-- Header -->
-		<header id="header">
-			<div class="logo">
-				<span class="icon fa-gem"></span>
-			</div>
-			<div class="content">
-				<div class="inner">
-					<h1>Steve Li</h1>
-					<p>一个高三的学生</p>
-				</div>
-			</div>
-			<nav>
-				<ul>
-					<li><a href="#intro">Intro</a></li>
-					<li><a href="https://blog.stevelbr.top">Blog</a></li>
-					<li><a href="https://github.com/lbr77">Github</a></li>
-					<li><a href="mailto:liborui0609@foxmail.com">Email</a></li>
-					<li><a href="https://space.bilibili.com/603677423">Bilibili</a></li>
-					<li><a href="https://twitter.com/stevelbr77">Twitter</a></li>
-				</ul>
-			</nav>
-		</header>
+        <!-- Header -->
+        <header id="header">
+            <div class="logo">
+                <span class="icon fa-gem"></span>
+            </div>
+            <div class="content">
+                <div class="inner">
+                    <h1>Steve Li</h1>
+                    <p>一个高三的学生</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#intro">Intro</a></li>
+                    <li><a href="https://blog.stevelbr.top">Blog</a></li>
+                    <li><a href="https://github.com/lbr77">Github</a></li>
+                    <li><a href="mailto:liborui0609@foxmail.com">Email</a></li>
+                    <li><a href="https://space.bilibili.com/603677423">Bilibili</a></li>
+                    <li><a href="https://twitter.com/stevelbr77">Twitter</a></li>
+                </ul>
+            </nav>
+        </header>
 
-		<!-- Main -->
-		<div id="main">
+        <!-- Main -->
+        <div id="main">
 
-			<!-- Intro -->
-			<article id="intro">
-				<h2 class="major">介绍</h2>
-				<p>我是一个高三的学生,(可能会)Python,C++,Javascript,docker,php,lua,c...</p>
-				<p> 1.邮箱(liborui0609@foxmail.com)</p>
-				<p> 2.Telegram(@stevelbr)</p>
-			</article>
-		</div>
+            <!-- Intro -->
+            <article id="intro">
+                <h2 class="major">介绍</h2>
+                <p>我是一个高三的学生,(可能会)Python,C++,Javascript,docker,php,lua,c...</p>
+                <p> 1.邮箱(liborui0609@foxmail.com)</p>
+                <p> 2.Telegram(@stevelbr)</p>
+            </article>
+        </div>
 
-		<!-- Footer -->
-		<footer id="footer">
-			<p class="copyright">&copy; Steve Li. <a href="https://icp.gov.moe" target="_blank">萌ICP备 </a><a href="https://icp.gov.moe/?keyword=20210001" target="_blank"> 20210001号</a>
-				| <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备2021016505号-1 </a> </p>
-		</footer>
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">&copy; Steve Li. <a href="https://icp.gov.moe" target="_blank">萌ICP备 </a><a
+                    href="https://icp.gov.moe/?keyword=20210001" target="_blank"> 20210001号</a>
+                | <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备2021016505号-1 </a> </p>
+        </footer>
 
-	</div>
+    </div>
 
-	<!-- BG -->
-	<div id="bg"></div>
+    <!-- BG -->
+    <div id="bg"></div>
 
-	<!-- Scripts -->
-	<script src="/assets/js/jquery.min.js"></script>
-	<script src="/assets/js/browser.min.js"></script>
-	<script src="/assets/js/breakpoints.min.js"></script>
-	<script src="/assets/js/util.js"></script>
-	<script src="/assets/js/main.js"></script>    <script>
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
         var CURSOR;
 
         Math.lerp = (a, b, n) => (1 - n) * a + n * b;
